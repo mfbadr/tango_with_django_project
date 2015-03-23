@@ -18,6 +18,7 @@ def populate():
       url="http://www.greenteapress.com/thinkpython/")
 
   add_page(cat=python_cat,
+      views=12,
       title="Learn Python in 10 Minutes",
       url="http://www.korokithakis.net/tutorials/python/")
 
@@ -28,10 +29,12 @@ def populate():
       url="https://docs.djangoproject.com/en/1.5/intro/tutorial01/")
 
   add_page(cat=django_cat,
+      views=8,
       title="Django Rocks",
       url="http://www.djangorocks.com/")
 
   add_page(cat=django_cat,
+      views=2,
       title="How to Tango with Django",
       url="http://www.tangowithdjango.com/")
 
@@ -39,11 +42,13 @@ def populate():
 
   add_page(cat=frame_cat,
       title="Bottle",
+      views=3,
       url="http://bottlepy.org/docs/dev/")
 
   add_page(cat=frame_cat,
       title="Flask",
-      url="http://flask.pocoo.org")
+      url="http://flask.pocoo.org",
+      views=5)
 
   #print out what we have added to the user
   for c in Category.objects.all():

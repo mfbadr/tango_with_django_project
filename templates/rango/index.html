@@ -18,6 +18,16 @@
     {% endif %}
     <br />
     <img src="{% static "images/rango.jpg" %}" alt="Picture of Rango">
+    <br />
+    {% if pages %}
+      <strong>Top 5 most viewed pages</strong>
+      <ul>
+        {% for page in pages %}
+        <li><a href="{{ page.url}}">{{ page.title }}</a> - {{ page.views }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
     <a href="/rango/about/"> About</a><br />
+    <a href="/rango/add_category/">Add a new Category</a><br />
   </body>
 </html>
