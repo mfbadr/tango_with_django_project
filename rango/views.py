@@ -22,6 +22,8 @@ def add_page(request, category_name_slug):
         page.category = cat
         page.views = 0
         page.save()
+        #why is this reverse of category and not rango:category
+        #compare to official django tutorial
         return HttpResponseRedirect(reverse('category', args=(category_name_slug,)))
     else:
       print form.errors
