@@ -1,20 +1,16 @@
-<!DOCTYPE html>
+{% extends 'base.html' %}
 {% load staticfiles %}
-<html>
-  <head>
-    <title>Rango</title>
-  </head>
-  <body>
-    <h1>Login with Rango</h1>
-    <form id="login_form" method="post" novalidate action="/rango/login/" enctype="multipart/form-data">
-      {% csrf_token %}
+{% block title %}Log in{% endblock %}
+{% block body_block %}
+  <h1>Login with Rango</h1>
+  <form id="login_form" method="post" novalidate action="/rango/login/" enctype="multipart/form-data">
+    {% csrf_token %}
 
-      Username: <input type='text' name='username' value='' size='50'/>
-      <br />
-      Password: <input type='password' name='password' value='' size='50'/>
-      <br />
+    Username: <input type='text' name='username' value='' size='50'/>
+    <br />
+    Password: <input type='password' name='password' value='' size='50'/>
+    <br />
 
-      <input type="submit" name="submit" value="Register" />
-    </form>
-  </body>
-</html>
+    <input type="submit" name="submit" value="Register" />
+  </form>
+{% endblock %}

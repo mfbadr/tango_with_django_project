@@ -1,10 +1,7 @@
-<!DOCTYPE html>
+{% extends 'base.html' %}
 {% load staticfiles %}
-<html>
-  <head>
-    <title>Rango</title>
-  </head>
-  <body>
+{% block title %}Rango{% endblock %}
+{% block body_block %}
     {% if user.is_authenticated %}
     <h1>Rango says... hello {{ user.username }}!</h1>
     {% else %}
@@ -14,7 +11,7 @@
     {% if categories %}
       <ul>
         {% for category in categories %}
-        <li><a href="/rango/category/{{ category.slug }}">{{ category }}</a></li>
+        <li><a href="{% url 'category' category.slug %}">{{ category.name }}</a></li>
         {% endfor %}
       </ul>
       {% else %}
@@ -31,17 +28,4 @@
         {% endfor %}
       </ul>
     {% endif %}
-
-    {% if user.is_authenticated %}
-    <h1>Rango says... hello {{ user.username }}!</h1>
-    <a href="/rango/logout/">logout</a><br />
-    <a href="/rango/restricted/">Restricted Page</a><br />
-    <a href="/rango/add_category/">Add a new Category</a><br />
-    {% else %}
-    <a href="/rango/register/">Register</a><br />
-    <a href="/rango/login/">Login</a><br />
-    {% endif %}
-
-    <a href="/rango/about/"> About</a><br />
-  </body>
-</html>
+{% endblock %}
