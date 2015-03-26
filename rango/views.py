@@ -11,6 +11,8 @@ from rango.models import Page
 from rango.forms import CategoryForm, PageForm
 from rango.forms import UserForm, UserProfileForm
 
+from datetime import datetime
+
 @login_required
 def add_page(request, category_name_slug):
   try:
@@ -59,20 +61,54 @@ def add_category(request):
   return render(request, 'rango/add_category.html', {'form': form})
 
 def index(request):
-  context_dict = {}
-  # Query the database for al ist of ALL categeries currently stored
-  # order the categoes by no fo likes descending
-  # retrieve the top 5, or all if less than 5
-  # place the list in our context_dict
   category_list = Category.objects.order_by('-likes')[:5]
-  context_dict['categories'] = category_list
   page_list = Page.objects.order_by('-views')[:5]
-  context_dict['pages'] = page_list
-  print 'request', request
-  return render(request, 'rango/index.html', context_dict)
+  context_dict = {'categories' : category_list, 'pages' : page_list }
+
+  # Get the number of visits to the site
+  # use COOKIES.get() to obtain the visits cooke
+  # if cookie exists, returned value is casted to an int
+  # if it doesn't exist, it defaults to 0
+  visits = request.session.get('visits')
+  if not visits:
+    visits = 1
+
+  reset_last_visit_time = False
+
+  last_visit = request.session.get('last_visit')
+
+  #does the cookie last_vist exist?
+  if last_visit:
+    print 'foo'
+    last_visit_time = datetime.strptime(last_visit[:-7], "%Y-%m-%d %H:%M:%S")
+
+    #if its been more than a day since the last visit...
+    if (datetime.now() - last_visit_time).seconds > 5:
+      visits = visits + 1
+      # and flag that the cookie last visit needs to be updated
+      reset_last_visit_time = True
+  else:
+    #last_visit doesn't exist, so flag that it should be set
+    reset_last_visit_time = True
+    context_dict['visits'] = visits
+
+  if reset_last_visit_time:
+    request.session['last_visit'] = str(datetime.now())
+    request.session['visits'] = visits
+
+  context_dict['visits'] = visits
+  response = render(request, 'rango/index.html', context_dict)
+
+  return response
+
+
 
 def about(request):
-  context_dict = {'boldmessage' : "This is about"}
+  if request.session.get('visits'):
+    count = request.session.get('visits')
+  else:
+    count = 0
+  context_dict = {'boldmessage' : "This is about", 'visits': count}
   return render(request, 'rango/about.html', context_dict)
 
 def category(request, category_name_slug):
@@ -95,6 +131,9 @@ def category(request, category_name_slug):
   return render(request, 'rango/category.html', context_dict)
 
 def register(request):
+  if request.session.test_cookie_worked():
+    print ">>>> TEST COOKIE WORKED!"
+    request.session.delete_test_cookie()
   #bool values for registration
   #changes to true on success
 
