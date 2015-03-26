@@ -11,6 +11,7 @@ from rango.models import Page
 from rango.forms import CategoryForm, PageForm
 from rango.forms import UserForm, UserProfileForm
 
+@login_required
 def add_page(request, category_name_slug):
   try:
     cat = Category.objects.get(slug=category_name_slug)
@@ -36,6 +37,7 @@ def add_page(request, category_name_slug):
   context_dict = {'form': form, 'category': cat}
   return render(request, 'rango/add_page.html', context_dict)
 
+@login_required
 def add_category(request):
   #post?
   if request.method == 'POST':
@@ -66,7 +68,7 @@ def index(request):
   context_dict['categories'] = category_list
   page_list = Page.objects.order_by('-views')[:5]
   context_dict['pages'] = page_list
-  print category_list
+  print 'request', request
   return render(request, 'rango/index.html', context_dict)
 
 def about(request):
